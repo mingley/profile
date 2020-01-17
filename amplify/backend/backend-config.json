@@ -1,27 +1,49 @@
 {
-	"auth": {
-		"testfcee93bb": {
-			"service": "Cognito",
-			"providerPlugin": "awscloudformation",
-			"dependsOn": [],
-			"customAuth": false
-		}
-	},
-	"api": {
-		"test": {
-			"service": "AppSync",
-			"providerPlugin": "awscloudformation",
-			"output": {
-				"authConfig": {
-					"additionalAuthenticationProviders": [],
-					"defaultAuthentication": {
-						"authenticationType": "AMAZON_COGNITO_USER_POOLS",
-						"userPoolConfig": {
-							"userPoolId": "authtestfcee93bb"
-						}
-					}
-				}
-			}
-		}
-	}
+    "auth": {
+        "testfcee93bb": {
+            "service": "Cognito",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": [],
+            "customAuth": false
+        },
+        "userPoolGroups": {
+            "service": "Cognito-UserPool-Groups",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": [
+                {
+                    "category": "auth",
+                    "resourceName": "testfcee93bb",
+                    "attributes": [
+                        "UserPoolId",
+                        "AppClientIDWeb",
+                        "AppClientID",
+                        "IdentityPoolId"
+                    ]
+                }
+            ]
+        }
+    },
+    "api": {
+        "test": {
+            "service": "AppSync",
+            "providerPlugin": "awscloudformation",
+            "output": {
+                "authConfig": {
+                    "additionalAuthenticationProviders": [],
+                    "defaultAuthentication": {
+                        "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+                        "userPoolConfig": {
+                            "userPoolId": "authtestfcee93bb"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "storage": {
+        "s32cc00229": {
+            "service": "S3",
+            "providerPlugin": "awscloudformation"
+        }
+    }
 }
